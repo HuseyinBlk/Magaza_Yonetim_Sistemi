@@ -4,7 +4,15 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="DbEntityUrunModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="DbEntityUrunModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Tbl_Admin">
+          <Key>
+            <PropertyRef Name="ADMINID" />
+          </Key>
+          <Property Name="ADMINID" Type="tinyint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ADMINAD" Type="varchar" MaxLength="20" />
+          <Property Name="ADMINSIFRE" Type="varchar" MaxLength="20" />
+        </EntityType>
         <EntityType Name="Tbl_Kategoriler">
           <Key>
             <PropertyRef Name="KATEGORIID" />
@@ -18,8 +26,9 @@
           </Key>
           <Property Name="MUSTERIID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="MUSTERIAD" Type="varchar" MaxLength="30" />
-          <Property Name="MSUTERISOYAD" Type="varchar" MaxLength="30" />
+          <Property Name="MUSTERISOYAD" Type="varchar" MaxLength="30" />
           <Property Name="SEHIR" Type="varchar" MaxLength="15" />
+          <Property Name="DURUM" Type="bit" />
         </EntityType>
         <EntityType Name="Tbl_Satislar">
           <Key>
@@ -79,7 +88,10 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Function Name="MARKAGETIR" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="MARKAGETIR1" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <EntityContainer Name="DbEntityUrunModelStoreContainer">
+          <EntitySet Name="Tbl_Admin" EntityType="Self.Tbl_Admin" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Tbl_Kategoriler" EntityType="Self.Tbl_Kategoriler" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Tbl_Musteriler" EntityType="Self.Tbl_Musteriler" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Tbl_Satislar" EntityType="Self.Tbl_Satislar" Schema="dbo" store:Type="Tables" />
@@ -97,8 +109,7 @@
             <End Role="Tbl_Urunler" EntitySet="Tbl_Urunler" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="DbEntityUrunModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -116,9 +127,10 @@
           </Key>
           <Property Name="MUSTERIID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="MUSTERIAD" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="MSUTERISOYAD" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="SEHIR" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Tbl_Satislar" Relationship="Self.FK_Tbl_Satislar_Tbl_Musteriler" FromRole="Tbl_Musteriler" ToRole="Tbl_Satislar" />
+          <Property Name="MUSTERISOYAD" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="DURUM" Type="Boolean" />
         </EntityType>
         <EntityType Name="Tbl_Satislar">
           <Key>
@@ -199,7 +211,22 @@
             <End Role="Tbl_Urunler" EntitySet="Tbl_Urunler" />
             <End Role="Tbl_Satislar" EntitySet="Tbl_Satislar" />
           </AssociationSet>
+          <FunctionImport Name="MARKAGETIR" ReturnType="Collection(DbEntityUrunModel.MARKAGETIR_Result)" />
+          <FunctionImport Name="MARKAGETIR1" ReturnType="Collection(String)" />
+          <EntitySet Name="Tbl_Admin" EntityType="DbEntityUrunModel.Tbl_Admin" />
         </EntityContainer>
+        <ComplexType Name="MARKAGETIR_Result">
+          <Property Type="String" Name="MARKA" Nullable="true" MaxLength="30" />
+          <Property Type="Int32" Name="Column1" Nullable="true" />
+        </ComplexType>
+        <EntityType Name="Tbl_Admin">
+          <Key>
+            <PropertyRef Name="ADMINID" />
+          </Key>
+          <Property Name="ADMINID" Type="Byte" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ADMINAD" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="ADMINSIFRE" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -217,9 +244,10 @@
           <EntitySetMapping Name="Tbl_Musteriler">
             <EntityTypeMapping TypeName="DbEntityUrunModel.Tbl_Musteriler">
               <MappingFragment StoreEntitySet="Tbl_Musteriler">
+                <ScalarProperty Name="DURUM" ColumnName="DURUM" />
+                <ScalarProperty Name="MUSTERISOYAD" ColumnName="MUSTERISOYAD" />
                 <ScalarProperty Name="MUSTERIID" ColumnName="MUSTERIID" />
                 <ScalarProperty Name="MUSTERIAD" ColumnName="MUSTERIAD" />
-                <ScalarProperty Name="MSUTERISOYAD" ColumnName="MSUTERISOYAD" />
                 <ScalarProperty Name="SEHIR" ColumnName="SEHIR" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -245,6 +273,24 @@
                 <ScalarProperty Name="FIYAT" ColumnName="FIYAT" />
                 <ScalarProperty Name="DURUM" ColumnName="DURUM" />
                 <ScalarProperty Name="KATEGORI" ColumnName="KATEGORI" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="MARKAGETIR" FunctionName="DbEntityUrunModel.Store.MARKAGETIR">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="DbEntityUrunModel.MARKAGETIR_Result">
+                <ScalarProperty Name="MARKA" ColumnName="MARKA" />
+                <ScalarProperty Name="Column1" ColumnName="Column1" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="MARKAGETIR1" FunctionName="DbEntityUrunModel.Store.MARKAGETIR1" />
+          <EntitySetMapping Name="Tbl_Admin">
+            <EntityTypeMapping TypeName="DbEntityUrunModel.Tbl_Admin">
+              <MappingFragment StoreEntitySet="Tbl_Admin">
+                <ScalarProperty Name="ADMINSIFRE" ColumnName="ADMINSIFRE" />
+                <ScalarProperty Name="ADMINAD" ColumnName="ADMINAD" />
+                <ScalarProperty Name="ADMINID" ColumnName="ADMINID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

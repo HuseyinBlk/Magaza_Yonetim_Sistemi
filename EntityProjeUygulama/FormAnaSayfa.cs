@@ -28,5 +28,12 @@ namespace EntityProjeUygulama
             FormUrun formUrun = new FormUrun();
             formUrun.Show();
         }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            FormIstatistik istatistik = new FormIstatistik();
+            istatistik.Show();
+
+        }
     }
 }

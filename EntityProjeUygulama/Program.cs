@@ -16,7 +16,7 @@ namespace EntityProjeUygulama
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new FormAnaSayfa());
+            Application.Run(new FormGiris());
         }
     }
 }

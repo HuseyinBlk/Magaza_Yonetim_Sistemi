@@ -84,5 +84,17 @@ namespace EntityProjeUygulama
             comboBox1.DisplayMember = "KATEGORIAD";
             comboBox1.DataSource = kategoriler;
         }
+
+        private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            int secilen = dataGridView1.SelectedCells[0].RowIndex;
+            idtxt.Text = dataGridView1.Rows[secilen].Cells[0].Value.ToString();
+            adTxt.Text = dataGridView1.Rows[secilen].Cells[1].Value.ToString();
+            markaTxt.Text = dataGridView1.Rows[secilen].Cells[2].Value.ToString();
+            stokTxt.Text = dataGridView1.Rows[secilen].Cells[3].Value.ToString();
+            fiyatTxt.Text = dataGridView1.Rows[secilen].Cells[4].Value.ToString();
+            DurumTxt.Text = dataGridView1.Rows[secilen].Cells[6].Value.ToString();
+            comboBox1.Text = dataGridView1.Rows[secilen].Cells[5].Value.ToString();
+        }
     }
 }
